@@ -15,7 +15,8 @@ void insertion_sort(int A[], int n, int &porównania, int &przypisania){
         przypisania++;
         
         porównania++;
-        while (j>=0 && A[j] > x){
+        // Sprawdzanie czy dany element jest większy
+        while (j>=0 && A[j] > x){ 
             porównania+=2;
             A[j+1]=A[j];
             przypisania++;
@@ -26,6 +27,7 @@ void insertion_sort(int A[], int n, int &porównania, int &przypisania){
             porównania++;
         }
         porównania++;
+
         
         A[j+1]=x;
         przypisania++;
@@ -36,13 +38,15 @@ void insertion_sort_2(int A[], int n, int &porównania, int &przypisania){
         porównania++;
         
         porównania++;
-        if (A[i] < A[i-1]) {
+        if (A[i] < A[i-1]) { #Nadpisywanie elementów
             int temp = A[i];
             A[i] = A[i-1];
             A[i-1] = temp;
             przypisania += 3;
         }
-        int mniejszy_element = A[i-1];
+
+	//Deklaracja który element jest mniejszy/większy
+        int mniejszy_element = A[i-1]; 
         int większy_element = A[i];
         przypisania += 2;
         
@@ -51,7 +55,9 @@ void insertion_sort_2(int A[], int n, int &porównania, int &przypisania){
             
             
             porównania++;
-            while (j>=0 && A[j] > większy_element){
+
+	    //Pętla gdy element jest większy od dwóch pozostałych 
+            while (j>=0 && A[j] > większy_element){ 
                 porównania+=2;
                 A[j+2]=A[j];
                 przypisania++;
@@ -71,6 +77,8 @@ void insertion_sort_2(int A[], int n, int &porównania, int &przypisania){
             przypisania++;
             
             porównania++;
+
+            //Pętla gdy element jest tylko większy od mniejszego 
             while (k>=0 && A[k] > mniejszy_element){
                 porównania+=2;
                 
@@ -83,11 +91,14 @@ void insertion_sort_2(int A[], int n, int &porównania, int &przypisania){
                 porównania++;
             }
             porównania++;
+
+	    //Przypis gdy element jest mniejszy od dwóch pozostałych
             A[k+1] = mniejszy_element;
             
             przypisania++;
         
     }
+    //Wyjątek gdy i zatrzymuje się na i = n-1, gdzie n nieparzyste
     if (n % 2 == 1){
         
         int x = A[n-1];
@@ -136,10 +147,11 @@ int main(){
     }
     cout << endl << endl;
     
-    
+    // Zaczynamy porównania i przypisania inicjując jego wartość równą 0
     int por_1, por_2, prz_1, prz_2;
     por_1 = por_2 = prz_1 = prz_2 = 0;
     
+    // funkcje na czas
     auto start1 = chrono::high_resolution_clock::now();
     insertion_sort(array1, n, por_1, prz_1);
     auto end1 = chrono::high_resolution_clock::now();
