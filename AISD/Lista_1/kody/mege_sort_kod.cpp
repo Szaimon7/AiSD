@@ -11,6 +11,8 @@ void MERGE(int A[], int p, int s, int k, int &porównania, int &przypisania){
     n_2 = k - s;
     vector<int> L(n_1), R(n_2);
     int i, j;
+    
+    // Tworzenie tablic
     for(i = 0; i < n_1; i++){
         L[i] = A[i + p];
         przypisania++;
@@ -25,6 +27,7 @@ void MERGE(int A[], int p, int s, int k, int &porównania, int &przypisania){
     t = p;
     
     porównania++;
+    // Pętla do momentu aż nie skończy się lewa i prawa tablica
     while(i < n_1 && j < n_2){
         porównania+=2;
         
@@ -32,10 +35,12 @@ void MERGE(int A[], int p, int s, int k, int &porównania, int &przypisania){
         
         
         porównania++;
+        // Nadpisujemy jeżeli dla tego samego indeksu lewa <= prawa
         if (L[i] <= R[j]){
             A[t++] = L[i++];
             przypisania+=3;
         }
+        // Nadpisujemy jeżeli dla tego samego indeksu lewa > prawa
         else{
             A[t++] = R[j++];
             przypisania+=3;
@@ -43,6 +48,7 @@ void MERGE(int A[], int p, int s, int k, int &porównania, int &przypisania){
         porównania++;
     }
     porównania++;
+    // Wyjątek, gdy jeszcze po lewej stronie zostaje element
     while(i < n_1){
         porównania++;
         A[t++] = L[i++];
@@ -57,21 +63,30 @@ void MERGE_SORT(int A[], int p, int k, int &porównania, int &przypisania){
     porównania++;
     if (p < k){
         int s;
+        // Równanie na środek
         s = p + (k-p)/2;
         przypisania++;
+        // Pierwsza rekurencja dzieląca do środka
         MERGE_SORT(A, p, s, porównania, przypisania);
+
+        // Druga rekurencja dzieląca od środka
         MERGE_SORT(A, s+1, k, porównania, przypisania);
+
+        // Scalanie gdy już nie można daleć podzielić
         MERGE(A, p, s, k, porównania, przypisania);
     } 
 }
 
 void MERGE_2(int A[], int low, int mid_1, int mid_2, int high, int &porównania, int &przypisania){
     int n_1, n_2, n_3;
+    // Inicjalizacje długości tablic
     n_1 = mid_1 - low + 1;
     n_2 = mid_2 - mid_1;
     n_3 = high - mid_2;
     vector<int> L(n_1), M(n_2), R(n_3);
     int i, j, k;
+    
+    // Tworzenie tablic
     for(i = 0; i < n_1; i++){
         L[i] = A[low + i];
         przypisania++;
@@ -91,20 +106,29 @@ void MERGE_2(int A[], int low, int mid_1, int mid_2, int high, int &porównania,
     t = low;
     
     porównania++;
+
+    // Pętla gdy w każdej tablicy pozostaje element
     while(i < n_1 && j < n_2 && k < n_3){
         porównania+=3;
         
         porównania+=2;
+    // Nadpisywanie jeżeli element o tym samym indeksie jest najmniejszy w lewej tablicy
+    // (Albo równy)
         if (L[i] <= M[j] && L[i] <= R[k]){
             A[t++] = L[i++];
             przypisania+=3;
         }
+    // Nadpisywanie jeżeli element o tym samym indeksie jest najmniejszy w środkowej tablicy
+    // (Albo równy)
         else {
             porównania+=2;
             if (M[j] <= R[k] && M[j] <= L[i]){
             A[t++] = M[j++];
             przypisania+=3;
         }
+
+    // Nadpisywanie jeżeli element o tym samym indeksie jest najmniejszy w prawej tablicy
+    // (Albo równy)
         else{
             A[t++] = R[k++];
             przypisania+=3;
@@ -116,6 +140,8 @@ void MERGE_2(int A[], int low, int mid_1, int mid_2, int high, int &porównania,
     
     
     porównania++;
+
+    // W prawej tablicy już nie ma elementów
     while(i < n_1 && j < n_2) {
         porównania++;
         if(L[i] <= M[j]) {
@@ -131,6 +157,8 @@ void MERGE_2(int A[], int low, int mid_1, int mid_2, int high, int &porównania,
     
     
     porównania++;
+
+    // W środkowej już nie ma elementów
     while(i < n_1 && k < n_3) {
         porównania++;
         if(L[i] <= R[k]) {
@@ -146,6 +174,8 @@ void MERGE_2(int A[], int low, int mid_1, int mid_2, int high, int &porównania,
     
     
     porównania++;
+
+    // W prawej już nie ma elementów
     while(j < n_2 && k < n_3) {
         porównania++;
         if(M[j] <= R[k]) {
@@ -161,6 +191,8 @@ void MERGE_2(int A[], int low, int mid_1, int mid_2, int high, int &porównania,
     
     
     porównania++;
+
+    // W lewej są już tylko elementy
     while(i < n_1){
         porównania++;
         A[t++] = L[i++];
@@ -175,6 +207,8 @@ void MERGE_2(int A[], int low, int mid_1, int mid_2, int high, int &porównania,
     
     
     porównania++;
+
+    // W środkowej są tylko elementy
     while(j < n_2){
         porównania++;
         A[t++] = M[j++];
@@ -187,6 +221,8 @@ void MERGE_2(int A[], int low, int mid_1, int mid_2, int high, int &porównania,
     porównania++;
     
     porównania++;
+
+    // W prawej sa tylko elementy
     while(k < n_3){
         porównania++;
         A[t++] = R[k++];
@@ -204,14 +240,24 @@ void MERGE_SORT_2(int A[], int low, int high, int &porównania, int &przypisania
     if (low < high){
         int mid_1;
         int mid_2;
+        // Inicjalizacje pierwszego środka
         mid_1 = (2 * low + high)/3;
         przypisania++;
+
+        // Inicjalizacja drugiego środka
         mid_2 = (low + 2 * high)/3;
-        
         przypisania++;
+	
+	// Rekurencja dzieląca od początku do pierwszego środka
         MERGE_SORT_2(A, low, mid_1, porównania, przypisania);
+
+	// Rekurencja dzieląca od pierwszego do drugiego środka
         MERGE_SORT_2(A, mid_1 + 1, mid_2, porównania, przypisania);
+
+	// Rekurencja dzieląca od drugiego środka do końca
         MERGE_SORT_2(A, mid_2 + 1, high, porównania, przypisania);
+
+        // Scalanie gdy już nie da się podzielić 
         MERGE_2(A, low, mid_1, mid_2, high, porównania, przypisania);
     } 
 }
@@ -234,9 +280,13 @@ int main(){
         cout << array1[i] << " ";
     }
     cout << endl << endl;
+
+    // Zaczynamy porównania i przypisania inicjując jego wartość równą 0
     int por_1, por_2, prz_1, prz_2;
     por_1 = por_2 = prz_1 = prz_2 = 0;
-    
+
+    // funkcje na czas   
+
     auto start2 = chrono::high_resolution_clock::now();
     MERGE_SORT_2(array2, 0, n-1, por_2, prz_2);
     auto end2 = chrono::high_resolution_clock::now();
@@ -268,4 +318,3 @@ int main(){
     delete[] array1;
     delete[] array2;
     return 0;
-}
