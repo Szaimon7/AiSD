@@ -38,7 +38,7 @@ void insertion_sort_2(int A[], int n, int &porównania, int &przypisania){
         porównania++;
         
         porównania++;
-        if (A[i] < A[i-1]) { #Nadpisywanie elementów
+        if (A[i] < A[i-1]) { //Nadpisywanie elementów
             int temp = A[i];
             A[i] = A[i-1];
             A[i-1] = temp;
@@ -182,3 +182,4 @@ int main(){
     delete[] array2;
     return 0;
 }
+
